@@ -1,5 +1,6 @@
 package fr.mastersid.stackoverflow.view
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,11 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.magnifier
 import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,23 +36,21 @@ import fr.mastersid.stackoverflow.data.Question
 import fr.mastersid.stackoverflow.ui.theme.StackOverflowTheme
 import fr.mastersid.stackoverflow.viewModel.QuestionsViewModel
 
+
 @Composable
 fun QuestionsScreen(questionsViewModel: QuestionsViewModel= viewModel()){
-    val questionsList = rememberSaveable{
-        mutableStateOf(
-            listOf(Question(1,"how are you",2),
-                Question(2,"how are you",3),
-                Question(5,"how are you how are you how are you how are you how are you how are you",6))
-        )
-    }
-
+    val questionsList by questionsViewModel.questionList.observeAsState(initial = emptyList() )
+    val refreshing by questionsViewModel.isUpdating.observeAsState(initial = false)
         Box{
-            LinearProgressIndicator();
+            if (refreshing){
+                LinearProgressIndicator();
+            }
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize () ,
                 contentPadding = PaddingValues (16.dp) ,
                 verticalArrangement = Arrangement.spacedBy (16.dp)) {
-                items(questionsList.value) {question->
+                items(questionsList) {question->
 
 
                     Row {
@@ -74,25 +76,10 @@ fun QuestionsScreen(questionsViewModel: QuestionsViewModel= viewModel()){
                     }
                 }
             }
-            Button(onClick = { questionsViewModel.UpdateQuestions() },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(16.dp),
-
-            ) {
-                Text(text = "Update Questions");
-
-            }
+            UpdateQuestionButton(updateQuestion = questionsViewModel::UpdateQuestions,
+                modifier =Modifier.align(Alignment.BottomCenter)
+                    . fillMaxWidth()
+                    . padding (16.dp))
         }
-
-
 }
-@Preview( showBackground = true )
-@Composable
-fun QuestionScreenPreview(){
-    StackOverflowTheme{
-        QuestionsScreen()
-    }
 
-}

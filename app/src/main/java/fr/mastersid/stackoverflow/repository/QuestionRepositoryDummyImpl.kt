@@ -13,13 +13,12 @@ class QuestionRepositoryDummyImpl @Inject constructor(): QuestionRepository {
 
     override suspend fun updateQuestionInfo() {
         questionResponse.emit(QuestionResponse.Pending)
-        delay(1000)
+        delay(5000)
         questionResponse.emit(QuestionResponse.Success(
             listOf(
                 Question(1,"how are you?",12),
-                Question(1,"first, Are you ready?",4),
-                Question(1,"second, how old are youuuuuu?",15),
-
+                Question(2,"first, Are you ready?",4),
+                Question(3,"second, how old are youuuuuu?",(1..24).random().toInt()),
             )
         ))
 
