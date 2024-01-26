@@ -17,18 +17,7 @@ class QuestionRepositoryImpl @Inject constructor(
     )
 
     override suspend fun updateQuestionInfo() {
-        stackOverflowService.getQuestionList().enqueue(
-            object: Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    Log.d("webservice","OK:${response.body()}")
-                }
-
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    Log.d("webservice","Error:${t.message}")
-                }
-
-            }
-        )
-
+        val list = stackOverflowService.getQuestionList()
+        questionResponse.emit(QuestionResponse.Success(list))
     }
 }

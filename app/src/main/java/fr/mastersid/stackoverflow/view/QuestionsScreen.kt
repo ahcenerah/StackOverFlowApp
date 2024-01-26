@@ -45,20 +45,17 @@ fun QuestionsScreen(questionsViewModel: QuestionsViewModel= viewModel()){
             if (refreshing){
                 LinearProgressIndicator();
             }
-
             LazyColumn(
                 modifier = Modifier.fillMaxSize () ,
                 contentPadding = PaddingValues (16.dp) ,
                 verticalArrangement = Arrangement.spacedBy (16.dp)) {
                 items(questionsList) {question->
-
-
                     Row {
                         Text(
                             text = question.title,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(8f),
+                            modifier = Modifier.weight(1f),
                             fontSize = 20.sp,
                             fontStyle = FontStyle.Italic
                         )
@@ -66,9 +63,6 @@ fun QuestionsScreen(questionsViewModel: QuestionsViewModel= viewModel()){
 
                         Text(
                             text = question.answerCount.toString(),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f),
                             fontSize = 20.sp,
                             fontStyle = FontStyle.Italic,
                             fontWeight = FontWeight.Bold
