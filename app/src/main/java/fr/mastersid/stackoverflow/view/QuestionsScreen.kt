@@ -39,7 +39,7 @@ import fr.mastersid.stackoverflow.viewModel.QuestionsViewModel
 
 @Composable
 fun QuestionsScreen(questionsViewModel: QuestionsViewModel= viewModel()){
-    val questionsList by questionsViewModel.questionList.observeAsState(initial = emptyList() )
+    val questionsList by questionsViewModel.questionList.observeAsState(initial = emptyList())
     val refreshing by questionsViewModel.isUpdating.observeAsState(initial = false)
         Box{
             if (refreshing){
@@ -69,8 +69,12 @@ fun QuestionsScreen(questionsViewModel: QuestionsViewModel= viewModel()){
                         )
                     }
                 }
+                item{
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
             }
-            UpdateQuestionButton(updateQuestion = questionsViewModel::UpdateQuestions,
+
+            UpdateQuestionButton(updateQuestion = questionsViewModel::updateQuestions,
                 modifier =Modifier.align(Alignment.BottomCenter)
                     . fillMaxWidth()
                     . padding (16.dp))

@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionsViewModel @Inject constructor(private val questionRepository: QuestionRepository):
+class QuestionsViewModel @Inject constructor(
+    private val questionRepository: QuestionRepository):
     ViewModel() {
     private val _questionList:MutableLiveData<List<Question>> = MutableLiveData(emptyList())
     val questionList : LiveData<List<Question>> =_questionList
@@ -30,14 +31,14 @@ class QuestionsViewModel @Inject constructor(private val questionRepository: Que
                 when(response){
                     is QuestionResponse.Pending -> _isUpdating.postValue(true)
                     is QuestionResponse.Success-> {
-                        _questionList.postValue(response.list)
+                        _questionList.postValue(response.list.sortedBy { question ->question.title  })
                         _isUpdating.postValue(false)
                     }
                 }
             }
         }
     }
-    fun UpdateQuestions(){
+    fun updateQuestions(){
         viewModelScope.launch(Dispatchers.IO) {
             questionRepository.updateQuestionInfo()
         }

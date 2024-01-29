@@ -79,4 +79,12 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-scalars:$retrofitVersion")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+}
+kapt {
+    correctErrorTypes = true
 }

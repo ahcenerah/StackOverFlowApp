@@ -13,7 +13,8 @@ class QuestionMoshiAdapter {
     }
     @ToJson
     fun toJson(listQuestion:List<Question>):ListQuestionJson{
-        return ListQuestionJson(listQuestion.map { question ->
+        return ListQuestionJson(
+            listQuestion.map { question ->
             QuestionJson(question.id,question.title,question.answerCount)
         })
     }

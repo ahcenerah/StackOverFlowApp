@@ -1,3 +1,7 @@
 package fr.mastersid.stackoverflow.data
 
-data class Question(val id:Int, val title:String, val answerCount:Int)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "question_table")
+data class Question(@PrimaryKey val id:Int, val title:String, val answerCount:Int)
