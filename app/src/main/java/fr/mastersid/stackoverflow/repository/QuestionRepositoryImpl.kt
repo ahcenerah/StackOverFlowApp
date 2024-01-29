@@ -33,8 +33,6 @@ class QuestionRepositoryImpl @Inject constructor(
         }
     }
 
-
-
     override suspend fun updateQuestionInfo() {
         questionResponse.emit(QuestionResponse.Pending)
         val list = stackOverflowService.getQuestionList()
