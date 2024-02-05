@@ -23,17 +23,22 @@ class QuestionsViewModel @Inject constructor(
 
     private val _isUpdating = MutableLiveData(false)
     val isUpdating : LiveData<Boolean> =_isUpdating
-
+    private val _errorMessage = MutableLiveData("")
+    val errorMessage : LiveData<String> =_errorMessage
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            questionRepository.questionResponse.collect{
-                response ->
+            questionRepository.questionResponse.collect{ response ->
                 when(response){
                     is QuestionResponse.Pending -> _isUpdating.postValue(true)
                     is QuestionResponse.Success-> {
                         _questionList.postValue(response.list.sortedBy { question ->question.title  })
                         _isUpdating.postValue(false)
                     }
+                    is QuestionResponse.Failure -> {
+                        _isUpdating.postValue(false)
+                        _errorMessage.postValue(response.errorMessage)
+                    }
+
                 }
             }
         }

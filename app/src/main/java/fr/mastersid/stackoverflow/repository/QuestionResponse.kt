@@ -7,4 +7,6 @@ sealed interface QuestionResponse{
 
     @JvmInline
     value class  Success(val list: List<Question>):QuestionResponse
+    @JvmInline
+    value class Failure(val errorMessage: String) :QuestionResponse
 }

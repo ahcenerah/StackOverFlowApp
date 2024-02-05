@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 import java.text.Normalizer
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,6 +22,8 @@ class QuestionRepositoryImpl @Inject constructor(
     private val questionDao:QuestionDao,
     @CoroutineScopeIO private val coroutineScopeIO: CoroutineScope,
     private val stackOverflowService: StackOverflowService ): QuestionRepository {
+
+
 
     override val questionResponse: MutableStateFlow<QuestionResponse> =MutableStateFlow(
         QuestionResponse.Success(emptyList())
@@ -34,8 +38,17 @@ class QuestionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateQuestionInfo() {
-        questionResponse.emit(QuestionResponse.Pending)
-        val list = stackOverflowService.getQuestionList()
-        questionDao.insertAll(list)
+        try {
+            questionResponse.emit(QuestionResponse.Pending)
+            val list = stackOverflowService.getQuestionList()
+            questionDao.insertAll(list)
+        } catch (e: IOException) {
+            val errorMessage = "Network error"
+            questionResponse.emit(QuestionResponse.Failure(errorMessage))
+
+        } catch (e: HttpException) {
+            val errorMessage = "Request error"
+            questionResponse.emit(QuestionResponse.Failure(errorMessage))
+        }
     }
 }
